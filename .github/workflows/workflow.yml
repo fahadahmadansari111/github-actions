@@ -17,11 +17,11 @@ jobs:
     - name: Build frontend Docker image
       run: |
         docker build frontend/ --file frontend/Dockerfile --tag frontend:$(date +%s)
-        docker save frontend frontend:$(date +%s)
+        docker save -o frontend frontend:$(date +%s)
     - name: Build backend Docker image
       run: |
         docker build backend/ --file backend/Dockerfile --tag backend:$(date +%s)
-        docker save backend backend:$(date +%s)
+        docker save -o backend backend:$(date +%s)
     - name: Run backend
       run: |
         scp -i $SSH_KEY backend ubuntu@150.230.232.20:~/
