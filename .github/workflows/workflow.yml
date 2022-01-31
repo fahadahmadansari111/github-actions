@@ -18,21 +18,19 @@ jobs:
       run: |
         export TAG=$(date +%s)
         docker build frontend/ --file frontend/Dockerfile --tag frontend:$TAG
-        # rm frontend || true
-        docker save -o frontend frontend:$TAG
+        docker save -o frontend-image frontend:$TAG
     - name: Build backend Docker image
       run: |
         export TAG=$(date +%s)
         docker build backend/ --file backend/Dockerfile --tag backend:$TAG
-        # rm frontend || true
-        docker save -o backend backend:$TAG
+        docker save -o backend-image backend:$TAG
     - name: Run backend
       run: |
-        scp -i $SSH_KEY backend-$TAG ubuntu@150.230.232.20:~/
-        ssh -i $SSH_KEY ubuntu@150.230.232.20 "docker import backend backend; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend"
+        scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
+        ssh -i $SSH_KEY ubuntu@150.230.232.20 "docker import backend-image backend; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image"
     - name: Run frontend
       run: |
-        scp -i $SSH_KEY frontend-$TAG ubuntu@129.154.230.82:~/
-        ssh -i $SSH_KEY ubuntu@129.154.230.82 "docker import frontend frontend; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend"
+        scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
+        ssh -i $SSH_KEY ubuntu@129.154.230.82 "docker import frontend-image frontend; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend-image"
     - name: Delete saved Docker images from hosted agent
-      run: rm frontend backend
+      run: rm frontend-image backend-image
