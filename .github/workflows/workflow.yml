@@ -18,13 +18,13 @@ jobs:
       run: |
         export TAG=$(date +%s)
         docker build frontend/ --file frontend/Dockerfile --tag frontend:$TAG
-        rm frontend || true
+        # rm frontend || true
         docker save -o frontend frontend:$TAG
     - name: Build backend Docker image
       run: |
         export TAG=$(date +%s)
         docker build backend/ --file backend/Dockerfile --tag backend:$TAG
-        rm frontend || true
+        # rm frontend || true
         docker save -o backend backend:$TAG
     - name: Run backend
       run: |
