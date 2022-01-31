@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const INSTRUCTOR = 'in28minutes'
-const COURSE_API_URL = 'http://localhost:8080'
+// const COURSE_API_URL = 'http://localhost:8080'
+const COURSE_API_URL = 'http://150.230.232.20'
 const INSTRUCTOR_API_URL = `${COURSE_API_URL}/instructors/${INSTRUCTOR}`
 
 class CourseDataService {
