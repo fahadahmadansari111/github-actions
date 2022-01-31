@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build and deploy app
 
 on:
   push:
@@ -16,19 +16,21 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build frontend Docker image
       run: |
-        export TAG=$(date +%s)
-        docker build frontend/ --file frontend/Dockerfile --tag frontend:$TAG
-        docker save -o frontend-image frontend:$TAG
+        docker build frontend/ --file frontend/Dockerfile --tag frontend
+        docker save -o frontend-image frontend
     - name: Build backend Docker image
       run: |
-        export TAG=$(date +%s)
-        docker build backend/ --file backend/Dockerfile --tag backend:$TAG
-        docker save -o backend-image backend:$TAG
+        docker build backend/ --file backend/Dockerfile --tag backend
+        docker save -o backend-image backend
     - name: Run backend
+      with:
+        SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
         scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
         ssh -i $SSH_KEY ubuntu@150.230.232.20 "docker import backend-image backend; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image"
     - name: Run frontend
+      with:
+        SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
         scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
         ssh -i $SSH_KEY ubuntu@129.154.230.82 "docker import frontend-image frontend; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend-image"
