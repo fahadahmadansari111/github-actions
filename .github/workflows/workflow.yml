@@ -51,7 +51,7 @@ jobs:
         port: 22
         script: 
           # scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
-          docker load < backend-image.tar docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image
+          docker load < backend-image.tar; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image
     - name: Run frontend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
