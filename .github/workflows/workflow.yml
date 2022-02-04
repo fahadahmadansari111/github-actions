@@ -43,7 +43,7 @@ jobs:
     - name: Run backend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
-      uses: actions/checkout@v2
+      uses: appleboy/ssh-action@master
       with:
         host: 150.230.232.20
         username: ubuntu
@@ -55,7 +55,7 @@ jobs:
     - name: Run frontend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
-      uses: actions/checkout@v2
+      uses: appleboy/ssh-action@master
       with:
         host: 129.154.230.82
         username: ubuntu
@@ -64,5 +64,3 @@ jobs:
         script: 
           # scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
           docker import frontend-image frontend; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend-image
-    - name: Delete saved Docker images from hosted agent
-      run: rm frontend-image backend-image
