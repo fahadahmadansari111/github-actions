@@ -22,17 +22,46 @@ jobs:
       run: |
         docker build backend/ --file backend/Dockerfile --tag backend
         docker save -o backend-image backend
+    - name: Copy docker image to backend
+      uses: appleboy/scp-action@master
+      with:
+        host: 150.230.232.20
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        source: "backend-image"
+        target: "~/"
+    - name: Copy docker image to frontend
+      uses: appleboy/scp-action@master
+      with:
+        host: 129.154.230.82
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        source: "frontend-image"
+        target: "~/"
     - name: Run backend
-      env:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-      run: |
-        scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
-        ssh -i $SSH_KEY ubuntu@150.230.232.20 "docker import backend-image backend; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image"
+      # env:
+      #   SSH_KEY: ${{ secrets.SSH_KEY }}
+      uses: ./
+      with:
+        host: 150.230.232.20
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: 
+          # scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
+          docker import backend-image backend; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image
     - name: Run frontend
-      env:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-      run: |
-        scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
-        ssh -i $SSH_KEY ubuntu@129.154.230.82 "docker import frontend-image frontend; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend-image"
+      # env:
+      #   SSH_KEY: ${{ secrets.SSH_KEY }}
+      with:
+        host: 129.154.230.82
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: 
+          # scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
+          docker import frontend-image frontend; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend-image
     - name: Delete saved Docker images from hosted agent
       run: rm frontend-image backend-image
