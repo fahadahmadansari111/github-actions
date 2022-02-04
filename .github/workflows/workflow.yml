@@ -43,7 +43,7 @@ jobs:
     - name: Run backend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
-      uses: ./
+      uses: actions/checkout@v2
       with:
         host: 150.230.232.20
         username: ubuntu
@@ -55,7 +55,7 @@ jobs:
     - name: Run frontend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
-      uses: ./
+      uses: actions/checkout@v2
       with:
         host: 129.154.230.82
         username: ubuntu
