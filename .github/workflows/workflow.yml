@@ -51,7 +51,7 @@ jobs:
         port: 22
         script: 
           # scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
-          docker load < backend-image.tar; docker stop backend; docker rm backend; docker run --name backend -d -p 80:8080 backend; rm backend-image
+          docker load < backend-image.tar; docker stop backend || true; docker rm backend || true; docker run --name backend -d -p 80:8080 backend; rm backend-image.tar
     - name: Run frontend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -63,4 +63,4 @@ jobs:
         port: 22
         script: 
           # scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
-          docker load < frontend-image.tar; docker stop frontend; docker rm frontend; docker run --name frontend -d -p 80:80 frontend; rm frontend-image
+          docker load < frontend-image.tar; docker stop frontend || true; docker rm frontend || true; docker run --name frontend -d -p 80:80 frontend; rm frontend-image.tar
