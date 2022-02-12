@@ -33,7 +33,7 @@ jobs:
             context: frontend/
             push: true
             file: frontend/Dockerfile
-            tags: ${{ github.sha }}
+            tags: lbsdocker1/frontend:${{ github.sha }}
             labels: frontend
   
   push_backend_to_registry:
@@ -61,7 +61,7 @@ jobs:
             context: backend/
             push: true
             file: backend/Dockerfile
-            tags: ${{ github.sha }}
+            tags: lbsdocker1/backend:${{ github.sha }}
             labels: backend
 
   run_app:
