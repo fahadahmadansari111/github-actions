@@ -96,6 +96,11 @@ jobs:
 #         port: 22
 #         source: "frontend-image.tar"
 #         target: "~/"
+    - name: Log in to Docker Hub
+      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Run backend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -108,7 +113,7 @@ jobs:
         script: 
 #           scp -i $SSH_KEY backend-image ubuntu@150.230.232.20:~/
 #           docker load < backend-image.tar; docker stop backend || true; docker rm backend || true; docker run --name backend -d -p 80:8080 backend; rm backend-image.tar
-          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_USERNAME }}; docker stop backend || true; docker rm backend || true; docker run --name backend -d -p 80:8080 lbsdocker1/backend:${{ github.sha }}; 
+          docker stop backend || true; docker rm backend || true; docker run --name backend -d -p 80:8080 lbsdocker1/backend:${{ github.sha }}; 
     - name: Run frontend
       # env:
       #   SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -121,5 +126,5 @@ jobs:
         script: 
 #           scp -i $SSH_KEY frontend-image ubuntu@129.154.230.82:~/
 #           docker load < frontend-image.tar; docker stop frontend || true; docker rm frontend || true; docker run --name frontend -d -p 80:80 frontend; rm frontend-image.tar
-          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_USERNAME }}; docker stop frontend || true; docker rm frontend || true; docker run --name frontend -d -p 80:8080 lbsdocker1/frontend:${{ github.sha }}; 
+          docker stop frontend || true; docker rm frontend || true; docker run --name frontend -d -p 80:8080 lbsdocker1/frontend:${{ github.sha }}; 
 
