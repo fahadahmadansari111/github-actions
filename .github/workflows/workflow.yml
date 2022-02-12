@@ -31,7 +31,8 @@ jobs:
           uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
           with:
             context: frontend/
-            push: true
+#             push: true
+            push: lbsdocker1/frontend
             file: frontend/Dockerfile
             tags: ${{ github.sha }}
             labels: frontend
@@ -59,7 +60,8 @@ jobs:
           uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
           with:
             context: backend/
-            push: true
+#             push: true
+            push: lbsdocker1/backend
             file: backend/Dockerfile
             tags: ${{ github.sha }}
             labels: backend
